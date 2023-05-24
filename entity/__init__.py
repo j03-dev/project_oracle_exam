@@ -14,7 +14,10 @@ class Provenance:
     def __init__(self, id=None, name=None, id_admin=None):
         self.id = id
         self.name = name
-        self.id_admin = name
+        self.id_admin = id_admin
+
+    def __str__(self):
+        return "Provenance{" + str(self.id) + "," + str(self.name) + "," + str(self.id_admin) + "}"
 
 
 class Categorie:
@@ -22,6 +25,9 @@ class Categorie:
         self.id = id
         self.name = name
         self.id_admin = id_admin
+
+    def __str__(self):
+        return "Categorie{" + str(self.id) + "," + str(self.name) + "," + str(self.id_admin) + "}"
 
 
 class Admin:
