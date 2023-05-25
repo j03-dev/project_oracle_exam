@@ -1,5 +1,5 @@
-from oracledb.exceptions import OperationalError
 from oracledb import Connection
+from oracledb.exceptions import OperationalError
 
 
 def database_connection():

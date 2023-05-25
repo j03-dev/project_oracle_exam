@@ -9,14 +9,9 @@ class ProduitDao(Dao):
             sql = """insert into produit(name, description, image, id_provenance, id_categorie, id_admin) values 
             (:name, :description, :image, :id_provenance, :id_categorie, :id_admin)
             """
-            self.conn.cursor() \
-                .execute(sql,
-                         name=entity.name,
-                         description=entity.description,
-                         image=entity.image,
-                         id_provenance=entity.id_provenance,
-                         id_categorie=entity.id_categorie,
-                         id_admin=entity.id_admin)
+            self.conn.cursor().execute(sql, name=entity.name, description=entity.description, image=entity.image,
+                                       id_provenance=entity.id_provenance, id_categorie=entity.id_categorie,
+                                       id_admin=entity.id_admin)
             self.conn.commit()
             return True
         except Exception as e:
@@ -26,12 +21,8 @@ class ProduitDao(Dao):
     def update(self, entity: Produit) -> bool:
         try:
             sql = "update produit set name=:name, description=:description, image=:image where id=:id"
-            self.conn.cursor() \
-                .execute(sql,
-                         name=entity.name,
-                         description=entity.description,
-                         image=entity.image,
-                         id=entity.id)
+            self.conn.cursor().execute(sql, name=entity.name, description=entity.description, image=entity.image,
+                                       id=entity.id)
             self.conn.commit()
         except Exception as e:
             print(f"Error {e}")
@@ -66,8 +57,8 @@ class ProduitDao(Dao):
         if len(result) == 0:
             return result
         cursor.close()
-        return [Produit(id_, name, description, image, id_provenance, id_categorie, id_admin)
-                for id_, name, description, image, id_provenance, id_categorie, id_admin in result]
+        return [Produit(id_, name, description, image, id_provenance, id_categorie, id_admin) for
+                id_, name, description, image, id_provenance, id_categorie, id_admin in result]
 
 
 if __name__ == "__main__":

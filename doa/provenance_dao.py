@@ -41,7 +41,7 @@ class ProvenanceDao(Dao):
         cursor.close()
         return Provenance(id_, name, id_admin)
 
-    def get_all(self) -> list[object]:
+    def get_all(self) -> list[Provenance]:
         sql = "select * from provenance"
         cursor = self.conn.cursor()
         cursor.execute(sql)

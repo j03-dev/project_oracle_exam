@@ -7,7 +7,7 @@ from doa.admin_dao import AdminDao
 from doa.categorie_dao import CategorieDao
 from doa.produit_dao import ProduitDao
 from doa.provenance_dao import ProvenanceDao
-from entity import Produit
+from entity import Produit, Categorie, Provenance
 from setting import database_connection
 
 app = Flask(__name__)
@@ -60,7 +60,7 @@ def login_admin():
     return render_template("login_admin.html")
 
 
-@app.route('/admin')
+@app.route('/admin', methods=["GET"])
 def interface_admin():
     if is_authenticate():
         provenances = provenance_dao.get_all()
@@ -71,14 +71,33 @@ def interface_admin():
 
 @app.route('/ajouter_categorie', methods=["POST"])
 def ajouter_categorie():
-    # Todo: implement add categorie
-    return render_template("admin_interface.html")
+    name = request.form.get("name")
+    id_admin = session["id_admin"]
+    if categorie_dao.create(Categorie(name=name, id_admin=id_admin)):
+        response = "categorie a été ajouter avec succès"
+        return render_template("admin_interface.html", succes=response)
+    response = "votre opération ne ses pas terminer correctement"
+    return render_template("admin_interface.html", error=response)
+
+
+@app.route('/effacer_categorie/<int:id_>', methods=["DELETE"])
+def effacer_categorie(id_: int):
+    if categorie_dao.delete(id_):
+        response = "categorie à été effacer avec succès dans la base de donnée"
+        return render_template("admin_interface.html", success=response)
+    response = "votre opération ne ses pas terminer correctement"
+    return render_template("admin_interface.html", error=response)
 
 
 @app.route('/ajouter_provenance', methods=["POST"])
 def ajouter_provenance():
-    # Todo: implement add provenance
-    return render_template("admin_interface.html")
+    name = request.form.get("name")
+    id_admin = session["id_admin"]
+    if provenance_dao.create(Provenance(name=name, id_admin=id_admin)):
+        response = "provenance a été ajouter avec succès"
+        return render_template("admin_interface.html", succes=response)
+    response = "votre opération ne ses pas terminer correctement"
+    return render_template("admin_interface.html", error=response)
 
 
 @app.route('/ajouter_produit', methods=["POST"])
