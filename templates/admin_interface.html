@@ -22,7 +22,7 @@
         <h2>Interface Admin</h2>
     </div>
     <h4 class="mb-3">Ajouter Nouveau Produit</h4>
-    <form class="needs-validation" action="http://localhost:5000/jouter_produit" method="post" novalidate>
+    <form class="needs-validation" action="http://localhost:5000/ajouter_produit" method="post" enctype="multipart/form-data" novalidate>
         <div class="mb-3">
             <label for="firstName">Nom produit</label>
             <input type="text" class="form-control" placeholder="nom produit" name="name" required>
@@ -30,12 +30,29 @@
                 Valid first name is required.
             </div>
         </div>
+        <div class="mb-3">
+            <label for="firstName">Description produit</label>
+            <textarea type="text" class="form-control" placeholder="nom produit" name="description" required>
+            </textarea>
+            <div class="invalid-feedback">
+                Ajouter une description.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="firstName">Description produit</label>
+            <input type="file" class="form-control" placeholder="image produit" name="image" required>
+            <div class="invalid-feedback">
+                Ajouter un image.
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label for="country">Provenance</label>
                 <select class="custom-select d-block w-100" name="id_provenance" required>
                     <option value="">Choisire</option>
-                    <option>Nosy-be</option>
+                    {% for provenance in provenances %}
+                        <option value="{{ provenance.id }}">{{ provenance.name }}</option>
+                    {% endfor %}
                 </select>
                 <div class="invalid-feedback">
                     Ajouter un Provenance valide.
@@ -45,7 +62,9 @@
                 <label for="state">Categorie</label>
                 <select class="custom-select d-block w-100" name="id_categorie" required>
                     <option value="">Choisire</option>
-                    <option>California</option>
+                    {% for categirie in categories %}
+                        <option value="{{ categirie.id }}">{{ categirie.name }}</option>
+                    {% endfor %}
                 </select>
                 <div class="invalid-feedback">
                     Ajouter un Categorie valide.

@@ -17,7 +17,7 @@ class ProvenanceDao(Dao):
             self.conn.commit()
             return True
         except Exception as e:
-            print("error {}", e)
+            print(f"error {e}")
             return False
 
     def delete(self, _id: int) -> bool:
@@ -27,7 +27,7 @@ class ProvenanceDao(Dao):
             self.conn.commit()
             return True
         except Exception as e:
-            print("error {}", e)
+            print(f"error {e}")
             return False
 
     def get_by_id(self, _id: int) -> Provenance:
