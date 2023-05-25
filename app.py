@@ -25,9 +25,13 @@ categorie_dao = CategorieDao(conn)
 
 
 def is_authenticate():
-    if session['is_logged_in']:
-        return True
-    return False
+    try:
+        if session['is_logged_in']:
+            return True
+        return False
+    except Exception as e:
+        print(f"error{e}")
+        return False
 
 
 @app.route('/')
@@ -92,12 +96,10 @@ def ajouter_produit():
 
         image = "image/" + image.filename
 
-        print("id_admin", id_admin)
-
         produit = Produit(name=name, description=description, image=image, id_provenance=id_provenance,
                           id_categorie=id_categorie, id_admin=id_admin)
 
-        print(produit_dao.create(produit))  # save produit-on oracle database
+        produit_dao.create(produit)  # save produit-on oracle database
 
         return render_template("admin_interface.html")
 
@@ -106,5 +108,3 @@ def ajouter_produit():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-# Todo add file input and text area for description
