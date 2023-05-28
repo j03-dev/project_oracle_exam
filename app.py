@@ -59,6 +59,15 @@ def login_admin():
     return render_template("login.html")
 
 
+@app.route("/admin", methods=["GET"])
+def interface_admin():
+    if is_admin_is_authenticated():
+        produits = produit_dao.get_all()
+        return render_template("admin.html", produits=produits, provenance_dao=provenance_dao,
+                               categorie_dao=categorie_dao)
+    return redirect("login")
+
+
 @app.route('/ajouter_categorie', methods=["POST"])
 def create_categorie():
     if is_admin_is_authenticated():
@@ -133,13 +142,15 @@ def ajouter_produit():
     return redirect("login")
 
 
-@app.route('/effacer_produit<int:id_>', methods=["DELETE"])
+@app.route('/effacer_produit/<id_>', methods=["POST"])
 def effacer_produit(id_: int):
-    if produit_dao.delete(id_):
-        response = "produit a été effacer avec succès"
-        return render_template("", succes=response)
-    response = "votre opération ne s'est pas terminé correctement"
-    return render_template("", error=response)
+    if is_admin_is_authenticated():
+        if produit_dao.delete(id_):
+            response = "produit a été effacer avec succès"
+            return render_template("admin.html", succes=response)
+        response = "votre opération ne s'est pas terminé correctement"
+        return render_template("admin.html", error=response)
+    return redirect("login")
 
 
 if __name__ == '__main__':

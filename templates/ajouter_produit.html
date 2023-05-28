@@ -8,7 +8,8 @@
 </head>
 <body>
 <section class="vh-100" style="background-color: #2779e2;">
-    <form class="needs-validation" action="http://localhost:5000/ajouter_produit" method="post">
+    <form class="needs-validation" action="http://localhost:5000/ajouter_produit" method="post"
+          enctype="multipart/form-data" novalidate>
         <div class="container h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-xl-9">
@@ -20,7 +21,7 @@
                                     <h6 class="mb-0">Nom du produit</h6>
                                 </div>
                                 <div class="col-md-9 pe-5">
-                                    <input type="text" class="form-control form-control-lg"/>
+                                    <input name="name" type="text" class="form-control form-control-lg"/>
                                 </div>
                             </div>
                             <hr class="mx-n3">
@@ -29,7 +30,7 @@
                                     <h6 class="mb-0">Description</h6>
                                 </div>
                                 <div class="col-md-9 pe-5">
-                                <textarea class="form-control" rows="3"
+                                <textarea class="form-control" name="description" rows="3"
                                           placeholder="Description"></textarea>
                                 </div>
                             </div>

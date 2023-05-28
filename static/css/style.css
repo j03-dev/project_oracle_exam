@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: bisque;
+    background-color: whitesmoke;
     font-family: "Victor Mono", serif;
 }
 
@@ -62,4 +62,36 @@ nav {
 
 .text-content p {
     font-size: large;
+}
+
+.bottom {
+    display: flex;
+    width: 100%;
+}
+
+.bottom-left {
+    width: 50%;
+}
+
+.bottom-right {
+    width: 50%;
+    display: flex;
+    margin: auto;
+    place-content: space-between;
+}
+
+.bottom-right button {
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+}
+
+.btn-danger {
+    background-color: #ff645f;
+}
+
+.btn-primary {
+    background-color: #73ff5f;
 }
