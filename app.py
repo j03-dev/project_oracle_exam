@@ -24,10 +24,9 @@ provenance_dao = ProvenanceDao(conn)
 categorie_dao = CategorieDao(conn)
 
 
-def is_authenticate():
+def is_admin_is_authenticated() -> bool:
     try:
-        if session['is_logged_in']:
-            return True
+        if session['is_logged_in']: return True
         return False
     except Exception as e:
         print(f"error{e}")
@@ -37,7 +36,7 @@ def is_authenticate():
 @app.route('/')
 def index():
     produits = produit_dao.get_all()
-    return render_template("index.html", produits=produits)
+    return render_template("index.html", produits=produits, provenance_dao=provenance_dao, categorie_dao=categorie_dao)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -55,38 +54,42 @@ def login_admin():
             session['is_logged_in'] = True
             return redirect("admin")
 
-        return render_template("login_admin.html", error="invalid credential")
+        return render_template("login.html", error="invalid credential")
 
-    return render_template("login_admin.html")
-
-
-@app.route('/admin', methods=["GET"])
-def interface_admin():
-    if is_authenticate():
-        provenances = provenance_dao.get_all()
-        categories = categorie_dao.get_all()
-        return render_template("admin_interface.html", provenances=provenances, categories=categories)
-    return redirect("/")
+    return render_template("login.html")
 
 
 @app.route('/ajouter_categorie', methods=["POST"])
-def ajouter_categorie():
-    name = request.form.get("name")
-    id_admin = session["id_admin"]
-    if categorie_dao.create(Categorie(name=name, id_admin=id_admin)):
-        response = "categorie a été ajouter avec succès"
-        return render_template("admin_interface.html", succes=response)
-    response = "votre opération ne ses pas terminer correctement"
-    return render_template("admin_interface.html", error=response)
+def create_categorie():
+    if is_admin_is_authenticated():
+        name = request.form.get("name")
+        id_admin = session["id_admin"]
+        if categorie_dao.create(Categorie(name=name, id_admin=id_admin)):
+            response = "categorie a été ajouter avec succès"
+            return render_template("", succes=response)
+        response = "votre opération ne ses pas terminer correctement"
+        return render_template("", error=response)
+    return redirect("login")
+
+
+@app.route('/maj_categorie/<int:id_>', methods=["UPDATE"])
+def update_categorie(id_: int):
+    if is_admin_is_authenticated():
+        name = request.form.get("name")
+        id_admin = session["id_admin"]
+        categorie_dao.update(Categorie(id_, name, id_admin))
+    return redirect("login")
 
 
 @app.route('/effacer_categorie/<int:id_>', methods=["DELETE"])
-def effacer_categorie(id_: int):
-    if categorie_dao.delete(id_):
-        response = "categorie à été effacer avec succès dans la base de donnée"
-        return render_template("admin_interface.html", success=response)
-    response = "votre opération ne ses pas terminer correctement"
-    return render_template("admin_interface.html", error=response)
+def delete_categorie(id_: int):
+    if is_admin_is_authenticated():
+        if categorie_dao.delete(id_):
+            response = "categorie à été effacer avec succès dans la base de donnée"
+            return render_template("", success=response)
+        response = "votre opération ne ses pas terminer correctement"
+        return render_template("", error=response)
+    return redirect("login")
 
 
 @app.route('/ajouter_provenance', methods=["POST"])
@@ -95,34 +98,48 @@ def ajouter_provenance():
     id_admin = session["id_admin"]
     if provenance_dao.create(Provenance(name=name, id_admin=id_admin)):
         response = "provenance a été ajouter avec succès"
-        return render_template("admin_interface.html", succes=response)
+        return render_template("", succes=response)
     response = "votre opération ne ses pas terminer correctement"
-    return render_template("admin_interface.html", error=response)
+    return render_template("", error=response)
 
 
-@app.route('/ajouter_produit', methods=["POST"])
+@app.route('/ajouter_produit', methods=["POST", "GET"])
 def ajouter_produit():
-    if is_authenticate():
-        name = request.form.get('name')
-        description = request.form.get('description')
-        image = request.files["image"]
-        id_provenance = request.form.get("id_provenance")
-        id_categorie = request.form.get("id_categorie")
-        id_admin = int(session['id_admin'])
-        # upload image file
-        image_path = os.path.join(upload_dir, secure_filename(image.filename))
-        image.save(image_path)
+    if is_admin_is_authenticated():
+        if request.method == "POST":
+            name = request.form.get('name')
+            description = request.form.get('description')
+            image = request.files["image"]
+            id_provenance = request.form.get("id_provenance")
+            id_categorie = request.form.get("id_categorie")
+            id_admin = int(session['id_admin'])
+            # upload image file
+            image_path = os.path.join(upload_dir, secure_filename(image.filename))
+            image.save(image_path)
 
-        image = "image/" + image.filename
+            image = "image/" + image.filename
 
-        produit = Produit(name=name, description=description, image=image, id_provenance=id_provenance,
-                          id_categorie=id_categorie, id_admin=id_admin)
+            produit = Produit(name=name, description=description, image=image, id_provenance=id_provenance,
+                              id_categorie=id_categorie, id_admin=id_admin)
 
-        produit_dao.create(produit)  # save produit-on oracle database
+            produit_dao.create(produit)  # save produit-on oracle database
 
-        return render_template("admin_interface.html")
+            return render_template("ajouter_produit.html")
+        else:
+            provenances = provenance_dao.get_all()
+            categories = categorie_dao.get_all()
+            return render_template("ajouter_produit.html", provenances=provenances, categories=categories)
 
     return redirect("login")
+
+
+@app.route('/effacer_produit<int:id_>', methods=["DELETE"])
+def effacer_produit(id_: int):
+    if produit_dao.delete(id_):
+        response = "produit a été effacer avec succès"
+        return render_template("", succes=response)
+    response = "votre opération ne s'est pas terminé correctement"
+    return render_template("", error=response)
 
 
 if __name__ == '__main__':

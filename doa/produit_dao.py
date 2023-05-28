@@ -45,7 +45,7 @@ class ProduitDao(Dao):
         result = cursor.fetchone()
         if result is None:
             return Produit()
-        id_, name, description, image, id_provenance, id_categorie, id_admin = result
+        id_, name, description, image, id_categorie, id_provenance, id_admin = result
         cursor.close()
         return Produit(id_, name, description, image, id_provenance, id_categorie, id_admin)
 
@@ -58,7 +58,7 @@ class ProduitDao(Dao):
             return result
         cursor.close()
         return [Produit(id_, name, description, image, id_provenance, id_categorie, id_admin) for
-                id_, name, description, image, id_provenance, id_categorie, id_admin in result]
+                id_, name, description, image, id_categorie, id_provenance, id_admin in result]
 
 
 if __name__ == "__main__":

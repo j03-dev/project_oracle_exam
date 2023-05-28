@@ -24,20 +24,21 @@ class CategorieDao(Dao):
             print(f"Error {e}")
             return False
 
-    def delete(self, _id: int) -> bool:
+    def delete(self, id_: int) -> bool:
         try:
             sql = "delete from categorie where id=:id"
-            self.conn.cursor().execute(sql, id=_id)
+            self.conn.cursor().execute(sql, id=id_)
             self.conn.commit()
             return True
         except Exception as e:
             print("error {}", e)
             return False
 
-    def get_by_id(self, _id: int) -> Categorie:
+    def get_by_id(self, id_: int) -> Categorie:
+        id_ = int(id_)
         sql = "select * from categorie where id=:id"
         cursor = self.conn.cursor()
-        cursor.execute(sql, id=_id)
+        cursor.execute(sql, id=id_)
         result = cursor.fetchone()
         if result is None:
             return Categorie()
@@ -65,4 +66,4 @@ if __name__ == "__main__":
     categorie = categorie_dao.get_all()
     print(categorie[0].name)
 
-    print(categorie_dao.get_by_id(2))
+    print(categorie_dao.get_by_id(1))
