@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add new provenance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='materialize/css/materialize.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
+</head>
+<body>
+{% include 'nav.html' %}
+<div class="center div-center">
+    <h2 class="center blue-grey-text darken-3">Update provenance</h2>
+    {% if provenance %}
+        <form class="col s12" action="/maj_provenance/{{ provenance.id }}" method="post">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="name" type="text" class="validate" name="name" value="{{ provenance.name }}">
+                    <label for="name">Name</label>
+                </div>
+                <button type="submit" class="btn-large">Update</button>
+            </div>
+        </form>
+    {% endif %}
+</div>
+</body>
+</html>

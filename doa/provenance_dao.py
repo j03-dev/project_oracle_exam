@@ -12,7 +12,7 @@ class ProvenanceDao(Dao):
 
     def update(self, entity: Provenance) -> bool:
         try:
-            sql = "update provenace set name=? where id=:id"
+            sql = "update provenance set name=:name where id=:id"
             self.conn.cursor().execute(sql, name=entity.name, id=entity.id)
             self.conn.commit()
             return True
@@ -22,7 +22,7 @@ class ProvenanceDao(Dao):
 
     def delete(self, _id: int) -> bool:
         try:
-            sql = "delete from provenace where id=:id"
+            sql = "delete from provenance where id=:id"
             self.conn.cursor().execute(sql, id=_id)
             self.conn.commit()
             return True

@@ -1,0 +1,19 @@
+<nav class="blue-grey darken-3">
+    <div class="nav-wrapper">
+        <a href="#" class="brand-logo center">From Madagascar</a>
+        <ul id="nav-mobile" class="left hide-on-med-and-down">
+            {% if is_authenticated() %}
+                <li>Admin</li>
+                <li><a href="/ajouter_produit">Add new Product</a></li>
+                <li><a href="/ajouter_categorie">Add new categorie</a></li>
+                <li><a href="/ajouter_provenance">Add new provenance</a></li>
+                <li><a href="/logout">logout</a></li>
+                <li></li>
+            {% else %}
+                <li><a href="/login">login</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    k
+</nav>
+<br>

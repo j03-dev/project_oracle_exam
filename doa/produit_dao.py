@@ -20,10 +20,12 @@ class ProduitDao(Dao):
 
     def update(self, entity: Produit) -> bool:
         try:
-            sql = "update produit set name=:name, description=:description, image=:image where id=:id"
+            sql = "update produit set name=:name, description=:description, image=:image, id_provenance=:id_provenance, id_categorie=:id_categorie where id=:id"
             self.conn.cursor().execute(sql, name=entity.name, description=entity.description, image=entity.image,
+                                       id_provenance=entity.id_provenance, id_categorie=entity.id_categorie,
                                        id=entity.id)
             self.conn.commit()
+            return True
         except Exception as e:
             print(f"Error {e}")
             return False

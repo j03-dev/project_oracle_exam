@@ -2,35 +2,94 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>from madagascar.com</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Title</title>
+    <link type="text/css" rel="stylesheet"
+          href="{{ url_for('static', filename='materialize/css/materialize.min.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
+<body class="center">
+{% include 'nav.html' %}
 <div class="container">
-    <div>
-        <nav>
-            <h1 class="titre">From Madagascar.com</h1>
-        </nav>
-    </div>
-    <hr>
     {% for produit in produits %}
-        <div class="card">
-            <div class="info-card">
-                <div class="image-content">
-                    <img src="{{ url_for('static', filename=produit.image) }}" alt="">
-                </div>
-                <div class="text-content">
-                    <h2 class="titre-produit">{{ produit.name }}</h2>
-                    <p> {{ produit.description }} </p>
-                    <div>
-                        <h3>Categorie: {{ categorie_dao.get_by_id(produit.id_categorie).name }}</h3>
-                        <h3>Provenance: {{ provenance_dao.get_by_id(produit.id_provenance).name }}</h3>
+        <div class="row">
+            <div class="col s12 m6">
+                <img class="responsive-img" src="{{ url_for('static', filename=produit.image) }}"
+                     alt="{{ produit.name }}">
+            </div>
+            <div class="col s12 m6 left-align">
+                <h1 class="blue-grey-text darken-3">{{ produit.name }}</h1>
+                <p> {{ produit.description }} </p>
+                <div class="row">
+                    <div class="col s6">
+                        <h5 class="blue-grey-text darken-3">
+                            <b>Categorie: {{ categorie_dao.get_by_id(produit.id_categorie).name }}</b></h5>
+                        <h5 class="blue-grey-text darken-3">
+                            <b>Provenance: {{ provenance_dao.get_by_id(produit.id_provenance).name }}</b></h5>
                     </div>
+                    {% if is_authenticated() %}
+                        <div class="col s8 l6">
+                            <div class="row">
+                                <div class="col s4">
+                                    <form action="/maj_produit/{{ produit.id }}">
+                                        <button class="btn blue white-text">Update</button>
+                                    </form>
+                                </div>
+                                <div class="col s4">
+                                    <form action="/effacer_produit/{{ produit.id }}" method="post">
+                                        <button class="btn red white-text">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
-            <hr>
         </div>
+        <hr>
     {% endfor %}
+    {% if is_authenticated() %}
+        <div class="row">
+            <div class="col s12 m6">
+                {% for categorie in categorie_dao.get_all() %}
+                    <div class="card">
+                        <h5>{{ categorie.name }}</h5>
+                        <div class="row">
+                            <div class="col s6 l6">
+                                <form action="/maj_categorie/{{ categorie.id }}" method="get">
+                                    <button class="btn blue white-text">Update</button>
+                                </form>
+                            </div>
+                            <div class="col s6 l6">
+                                <form action="/effacer_categorie/{{ categorie.id }}" method="post">
+                                    <button class="btn red white-text">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="col s12 m6">
+                {% for provenance in provenance_dao.get_all() %}
+                    <div class="card">
+                        <h5> {{ provenance.name }}</h5>
+                        <div class="row">
+                            <div class="col s6 l6">
+                                <form action="/maj_provenance/{{ provenance.id }}" method="get">
+                                    <button class="btn blue white-text">Update</button>
+                                </form>
+                            </div>
+                            <div class="col s6 l6">
+                                <form action="/effacer_provenance/{{ provenance.id }}" method="post">
+                                    <button class="btn red white-text">Delete</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
 </div>
 </body>
 </html>

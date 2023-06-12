@@ -5,7 +5,7 @@ from oracledb.exceptions import OperationalError
 def database_connection():
     username = "joe"
     password = "joejoe"
-    hostname = "192.168.181.28:1521"
+    hostname = "192.168.63.28:1521"
     db_name = "projet_oracle_db"
 
     try:
