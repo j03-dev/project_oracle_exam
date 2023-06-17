@@ -135,7 +135,7 @@ def ajouter_provenance():
     redirect("/login")
 
 
-@app.route('/effacer_provenance/<int:id_>', methods=["post"])
+@app.route('/effacer_provenance/<int:id_>', methods=["POST"])
 def delete_provenance(id_: int):
     if is_admin_is_authenticated():
         if provenance_dao.delete(id_):
@@ -143,7 +143,7 @@ def delete_provenance(id_: int):
     return redirect("/login")
 
 
-@app.route('/maj_provenance/<int:id_>', methods=["post", "get"])
+@app.route('/maj_provenance/<int:id_>', methods=["POST", "GET"])
 def update_provenance(id_: int):
     if is_admin_is_authenticated():
         provenance = provenance_dao.get_by_id(id_)
@@ -194,8 +194,8 @@ def delete_produit(id_: int):
     if is_admin_is_authenticated():
         if produit_dao.delete(id_):
             response = "produit a été effacer avec succès"
-            return render_template("index.html", succes=response, is_authenticated=is_admin_is_authenticated)
-        return redirect("")
+            return redirect("/")
+        return redirect("/")
     return redirect("login")
 
 

@@ -1,3 +1,7 @@
+body {
+    font-family: "JetBrains Mono", serif;
+}
+
 .div-center {
     position: absolute;
     top: 50%;
