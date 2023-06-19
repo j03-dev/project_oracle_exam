@@ -1,4 +1,4 @@
-from doa import Dao
+from dao import Dao
 from entity import Produit
 
 
@@ -11,6 +11,7 @@ class ProduitDao(Dao):
             cursor.execute(sql, name=entity.name, description=entity.description, image=entity.image,
                            id_categorie=entity.id_categorie,
                            id_admin=entity.id_admin)
+            cursor.close()
             self.conn.commit()
             return True
         except Exception as e:
@@ -25,9 +26,11 @@ class ProduitDao(Dao):
                   " image=:image," \
                   " id_categorie=:id_categorie" \
                   " where id=:id"
-            self.conn.cursor().execute(sql, name=entity.name, description=entity.description, image=entity.image,
-                                       id_categorie=entity.id_categorie,
-                                       id=entity.id)
+            cursor = self.conn.cursor()
+            cursor.execute(sql, name=entity.name, description=entity.description, image=entity.image,
+                           id_categorie=entity.id_categorie,
+                           id=entity.id)
+            cursor.close()
             self.conn.commit()
             return True
         except Exception as e:
@@ -37,7 +40,9 @@ class ProduitDao(Dao):
     def delete(self, id_: int) -> bool:
         try:
             sql = "delete from produit where id=:id"
-            self.conn.cursor().execute(sql, id=id_)
+            cursor = self.conn.cursor()
+            cursor.execute(sql, id=id_)
+            cursor.close()
             self.conn.commit()
             return True
         except Exception as e:

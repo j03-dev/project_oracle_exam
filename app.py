@@ -1,30 +1,28 @@
 from flask import Flask, render_template, request
 
-from admin.app import admin
-from admin.app import categorie_dao, produit_dao
+from admin.app import admin, produit_dao, categorie_dao
 
 app = Flask(__name__)
 app.secret_key = "24C5Bda7cB3150E20be510065B7cff9ea9caB7DA"
 app.register_blueprint(admin)
 
-produits = produit_dao.get_all()
-
 
 @app.route("/")
 def index():
+    produits = produit_dao.get_all()
     return render_template("index.html", produits=produits)
 
 
 @app.route("/<categorie>")
 def trie_par(categorie):
-    global produits
+    produits = produit_dao.get_all()
     c_produits = [prod for prod in produits if categorie_dao.get_by_id(prod.id_categorie).name == categorie]
     return render_template("index.html", produits=c_produits)
 
 
 @app.route("/search", methods=["post"])
 def search():
-    global produits
+    produits = produit_dao.get_all()
     if request.method == "POST":
         name = request.form.get('name')
         print(name)

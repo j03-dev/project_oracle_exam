@@ -3,9 +3,9 @@ import os
 from flask import Blueprint, render_template, request, session, redirect
 from werkzeug.utils import secure_filename
 
-from doa.admin_dao import AdminDao
-from doa.categorie_dao import CategorieDao
-from doa.produit_dao import ProduitDao
+from dao.admin_dao import AdminDao
+from dao.categorie_dao import CategorieDao
+from dao.produit_dao import ProduitDao
 from entity import Admin, Produit
 from setting import database_connection
 

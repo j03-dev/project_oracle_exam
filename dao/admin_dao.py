@@ -1,4 +1,4 @@
-from doa import Dao
+from dao import Dao
 from entity import Admin
 from setting import database_connection
 
