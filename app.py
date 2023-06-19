@@ -30,5 +30,11 @@ def search():
         return render_template("index.html", produits=s_produits)
 
 
+@app.route("/detail/<id_>", methods=["get"])
+def detail(id_: int):
+    produit = produit_dao.get_by_id(id_)
+    return render_template("detail.html", produit=produit)
+
+
 if __name__ == "__main__":
     app.run(debug=True)

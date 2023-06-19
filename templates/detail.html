@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>From Madagascar</title>
+    {% include 'requirements/css_requirment.html' %}
+</head>
+<body>
+{% include 'nav.html' %}
+<div class="py-5 bg-light border-bottom mb-4">
+    <div class="container">
+        <div class="text-center my-5">
+            {% if produit %}
+                <h1 class="fw-bolder">{{ produit.name }}</h1>
+                <a href="{{ url_for('static', filename=produit.image) }}"><img
+                        src="{{ url_for('static', filename=produit.image) }}" alt="cover" class="cover mycover"></a>
+                <p class="lead mb-0">{{ produit.description }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% include 'requirements/js_requirement.html' %}
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
