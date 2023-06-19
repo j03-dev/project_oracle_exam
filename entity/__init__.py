@@ -1,23 +1,21 @@
 class Produit:
-    def __init__(self, id=None, name=None, description=None, image=None, id_categorie=None, id_provenance=None,
+    def __init__(self, id=None, name=None, description=None, image=None, id_categorie=None, date=None,
                  id_admin=None):
         self.id = id
         self.name = name
         self.description = description
         self.image = image
         self.id_categorie = id_categorie
-        self.id_provenance = id_provenance
+        self.data = data
         self.id_admin = id_admin
 
 
-class Provenance:
-    def __init__(self, id=None, name=None, id_admin=None):
-        self.id = id
-        self.name = name
-        self.id_admin = id_admin
-
-    def __str__(self):
-        return "Provenance{" + str(self.id) + "," + str(self.name) + "," + str(self.id_admin) + "}"
+class Evolution:
+    def __init__(self, id=None, date=None, prix=None, id_produit=None):
+        self.id: int = id
+        self.date: int = date
+        self.prix: str = prix
+        self.id_produit: int = id_produit
 
 
 class Categorie:

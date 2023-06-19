@@ -13,7 +13,7 @@ class Dao:
         """
         :param conn: conn is Connection object from oracledb import Connection
         """
-        self.conn = conn
+        self.conn: Connection = conn
 
     def create(self, entity: Any) -> bool:
         """
@@ -23,7 +23,7 @@ class Dao:
         """
         pass
 
-    def delete(self, _id: int) -> bool:
+    def delete(self, id_: int) -> bool:
         """delete information on the database"""
         pass
 
@@ -31,10 +31,10 @@ class Dao:
         """update information on the database"""
         pass
 
-    def get_by_id(self, _id: int) -> object:
+    def get_by_id(self, id_: int) -> object:
         """
         get entity from database with here id
-        :param _id:
+        :param id_:
         :return: entity object
         """
         pass

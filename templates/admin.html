@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    {% include 'requirements/css_requirment.html' %}
+</head>
+<body>
+{% include 'nav.html' %}
+<section>
+    <div class="container-xl">
+        <div class="table-responsive">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>Manage <b>Client</b></h2>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Date Inscription</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="client: ${listClient}">
+                        <td th:text="${client.getId()}"></td>
+                        <td th:text="${client.getUsername()}"></td>
+                        <td th:text="${client.getEmail()}"></td>
+                        <td th:text="${client.getPassword()}"></td>
+                        <td th:text="${client.getDateInscription()}"></td>
+                        <td>
+                            <form method="post" action="/admin/deleteClient">
+                                <button class="btn btn-danger" name="id_client" type="submit"
+                                        th:value="${client.getId()}">Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br><br>
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>Manage <b>Produit</b></h2>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Prix</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="produit: ${listProduit}">
+                        <td th:text="${produit.getId()}"></td>
+                        <td th:text="${produit.getName()}"></td>
+                        <td th:text="${produit.getPhoto()}"></td>
+                        <td th:text="${produit.getPrix()}"></td>
+                        <td th:text="${produit.getDescription()}"></td>
+                        <td>
+                            <form method="post" action="/admin/deleteProduit">
+                                <button class="btn btn-danger" name="id_produit" type="submit"
+                                        th:value="${produit.getId()}">Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br><br>
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>Manage <b>Command</b></h2>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Id Client</th>
+                        <th>Id Produit</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="command: ${listCommand}">
+                        <td th:text="${command.getId()}"></td>
+                        <td th:text="${command.getId_client()}"></td>
+                        <td th:text="${command.getId_produit()}"></td>
+                        <td th:text="${command.getDate()}"></td>
+                        <td>
+                            <form method="post" action="/admin/deleteCommand">
+                                <button class="btn btn-danger" name="id_command" type="submit"
+                                        th:value="${command.getId()}">Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+{% include 'requirements/js_requirement.html' %}
+</html>

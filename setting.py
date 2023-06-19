@@ -5,8 +5,8 @@ from oracledb.exceptions import OperationalError
 def database_connection():
     username = "joe"
     password = "joejoe"
-    hostname = "192.168.190.28:1521"
-    db_name = "projet_oracle_db"
+    hostname = "192.168.200.28:1521"
+    db_name = "blog"
 
     try:
         dns = f"{username}/{password}@{hostname}/{db_name}"

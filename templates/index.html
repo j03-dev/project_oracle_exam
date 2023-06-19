@@ -1,95 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link type="text/css" rel="stylesheet"
-          href="{{ url_for('static', filename='materialize/css/materialize.min.css') }}">
-    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Blog Home - Start Bootstrap Template</title>
+    <!-- Core theme CSS (includes Bootstrap)-->
+    {#        <link href="css/styles.css" rel="stylesheet" />#}
+    {% include 'requirements/css_requirment.html' %}
 </head>
-<body class="center">
+<body>
 {% include 'nav.html' %}
+<!-- Page header with logo and tagline-->
+<header class="py-5 bg-light border-bottom mb-4">
+    <div class="container">
+        <div class="text-center my-5">
+            <h1 class="fw-bolder">Welcome to Blog From Madagascar</h1>
+            <p class="lead mb-0">"My blog focuses on the products exported by Madagascar. Explore the diverse range of
+                handicrafts, textiles, spices, vanilla, coffee, gemstones, and agricultural products that showcase the
+                country's rich biodiversity and cultural heritage. Discover the captivating stories behind these unique
+                products and their positive impact on local communities and the environment. Join me on this journey of
+                exploration and appreciation for Madagascar's exports."</p>
+        </div>
+    </div>
+</header>
+<!-- Page content-->
 <div class="container">
-    {% for produit in produits %}
-        <div class="row">
-            <div class="col s12 m6">
-                <img class="responsive-img" src="{{ url_for('static', filename=produit.image) }}"
-                     alt="{{ produit.name }}">
-            </div>
-            <div class="col s12 m6 left-align">
-                <h1 class="blue-grey-text darken-3">{{ produit.name }}</h1>
-                <p> {{ produit.description }} </p>
-                <div class="row">
-                    <div class="col s6">
-                        <h5 class="blue-grey-text darken-3">
-                            <b>Categorie: {{ categorie_dao.get_by_id(produit.id_categorie).name }}</b></h5>
-                        <h5 class="blue-grey-text darken-3">
-                            <b>Provenance: {{ provenance_dao.get_by_id(produit.id_provenance).name }}</b></h5>
+    <div class="row">
+        <!-- Blog entries-->
+        <div class="col-lg-8">
+            <!-- Featured blog post-->
+            {% if produits %}
+                {% set produit = produits[0] %}
+                <div class="card mb-4">
+                    <a href="{{ produit.image }}"><img class="card-img-top"
+                                                       src="{{ url_for('static', filename=produit.image) }}"
+                                                       alt="{{ produit.name }}"/></a>
+                    <div class="card-body">
+                        <div class="small text-muted">{{ produit.date }}</div>
+                        <h2 class="card-title">{{ produit.name }}</h2>
+                        <p class="card-text">{{ produit.description }}</p>
+                        {#                        <a class="btn btn-primary" href="#!">Read more →</a>#}
                     </div>
-                    {% if is_authenticated() %}
-                        <div class="col s8 l6">
-                            <div class="row">
-                                <div class="col s4">
-                                    <form action="/maj_produit/{{ produit.id }}">
-                                        <button class="btn blue-grey white-text">Update</button>
-                                    </form>
-                                </div>
-                                <div class="col s4">
-                                    <form action="/effacer_produit/{{ produit.id }}" method="post">
-                                        <button class="btn red white-text">Delete</button>
-                                    </form>
-                                </div>
+                </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-lg-12">
+                    {% for produit in produits %}
+                        <div class="card mb-4">
+                            <a href="{{ produit.image }}">
+                                <img class="card-img-top"
+                                     src="{{ url_for('static', filename=produit.image) }}"
+                                     alt="{{ produit.name }}"/>
+                            </a>
+                            <div class="card-body">
+                                <div class="small text-muted">{{ produit.date }}</div>
+                                <h2 class="card-title">{{ produit.name }}</h2>
+                                <p class="card-text">{{ produit.description }}</p>
                             </div>
                         </div>
-                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         </div>
-        <hr>
-    {% endfor %}
-    {% if is_authenticated() %}
-        <div class="row">
-            <div class="col s12 m6">
-                {% for categorie in categorie_dao.get_all() %}
-                    <div class="card">
-                        <h5>{{ categorie.name }}</h5>
-                        <div class="row">
-                            <div class="col s6 l6">
-                                <form action="/maj_categorie/{{ categorie.id }}" method="get">
-                                    <button class="btn blue-grey white-text">Update</button>
-                                </form>
-                            </div>
-                            <div class="col s6 l6">
-                                <form action="/effacer_categorie/{{ categorie.id }}" method="post">
-                                    <button class="btn red white-text">Delete</button>
-                                </form>
-                            </div>
-                        </div>
+        <!-- Side widgets-->
+        <div class="col-lg-4">
+            <!-- Search widget-->
+            <div class="card mb-4">
+                <div class="card-header">Search</div>
+                <div class="card-body">
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="Enter search term..."
+                               aria-label="Enter search term..." aria-describedby="button-search"/>
+                        <button class="btn btn-primary" id="button-search" type="button">Go!</button>
                     </div>
-                {% endfor %}
+                </div>
             </div>
-            <div class="col s12 m6">
-                {% for provenance in provenance_dao.get_all() %}
-                    <div class="card">
-                        <h5> {{ provenance.name }}</h5>
-                        <div class="row">
-                            <div class="col s6 l6">
-                                <form action="/maj_provenance/{{ provenance.id }}" method="get">
-                                    <button class="btn blue-grey white-text">Update</button>
-                                </form>
-                            </div>
-                            <div class="col s6 l6">
-                                <form action="/effacer_provenance/{{ provenance.id }}" method="post">
-                                    <button class="btn red white-text">Delete</button>
-                                </form>
-                            </div>
-
+            <!-- Categories widget-->
+            <div class="card mb-4">
+                <div class="card-header">Categories</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="#!">Artisanal</a></li>
+                                <li><a href="#!">Fishing</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="#!">Farming</a></li>
+                                <li><a href="#!">Breeding</a></li>
+                            </ul>
                         </div>
                     </div>
-                {% endfor %}
+                </div>
+            </div>
+            <!-- Side widget-->
+            <div class="card mb-4">
+                <div class="card-header">Explore Madagascar's Exports</div>
+                <div class="card-body">
+                    Discover unique handicrafts, textiles, spices, gemstones, and more.
+                    Learn about their origins, cultural significance, and sustainable practices.
+                    Get inspired by captivating stories and positive community impact.
+                    Unlock the hidden treasures of Madagascar!
+                </div>
             </div>
         </div>
-    {% endif %}
+    </div>
 </div>
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
+</footer>
+<!-- Bootstrap core JS-->
+{% include 'requirements/js_requirement.html' %}
+<!-- Core theme JS-->
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 </html>
