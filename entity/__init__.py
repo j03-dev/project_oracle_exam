@@ -6,7 +6,7 @@ class Produit:
         self.description = description
         self.image = image
         self.id_categorie = id_categorie
-        self.data = data
+        self.date = date
         self.id_admin = id_admin
 
 

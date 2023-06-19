@@ -25,10 +25,9 @@ class ProduitDao(Dao):
                   " image=:image," \
                   " id_categorie=:id_categorie" \
                   " where id=:id"
-            cursor = self.conn.cursor()
-            cursor.execute(sql, name=entity.name, description=entity.description, image=entity.image,
-                           id_categorie=entity.id_categorie,
-                           id=entity.id)
+            self.conn.cursor().execute(sql, name=entity.name, description=entity.description, image=entity.image,
+                                       id_categorie=entity.id_categorie,
+                                       id=entity.id)
             self.conn.commit()
             return True
         except Exception as e:

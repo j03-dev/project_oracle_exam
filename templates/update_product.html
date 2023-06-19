@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% include 'requirements/css_requirment.html' %}
+    <title>Update Product</title>
+</head>
+<body>
+{% include 'nav.html' %}
+<div class="container center_div">
+    <section class="card-body">
+        <div class="px-4 py-5 px-md-5 text-center text-lg-start" style="background-color: hsl(0, 0%, 96%)">
+            <div class="container">
+                <div class="row gx-lg-5 align-items-center">
+                    <div class="col-lg-12 mb-5 mb-lg-0">
+                        <div class="card-body py-5 px-md-5">
+                            {% if produit %}
+                                <form action="/update_product/{{ produit.id }}" method="post"
+                                      enctype="multipart/form-data">
+                                    <div class="form-row">
+                                        <h2>Update Product</h2>
+                                        <div class="form-group col-md-6">
+                                            <label for="name">Name Of Product</label>
+                                            <input type="text" class="form-control" id="name" name="name"
+                                                   value="{{ produit.name }}"
+                                                   placeholder="Name">
+                                        </div>
+                                        <br>
+                                        <div class="form-group col-md-6">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="image" name="image"
+                                                       value="{{ produit.image }}">
+                                                <label for="image" data-browse="Image">Image Of Product</label>
+                                            </div>
+                                        </div>
+                                        <br>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea type="text" class="form-control" id="description" name="description"
+                                                  placeholder="Some description here"
+                                                  style="height:150px;">{{ produit.description }}</textarea>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="categorie" name="id_categorie">Categorie</label>
+                                            <select id="categorie" class="form-control" name="id_categorie">
+                                                {% set id_categorie = produit.id_categorie %}
+                                                <option selected
+                                                        value="{{ id_categorie }}">{{ categorie_dao.get_by_id(id_categorie).name }}</option>
+                                                {% for categorie in categories %}
+                                                    {% if categorie.id != id_categorie %}
+                                                        <option value="{{ categorie.id }}">{{ categorie.name }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <button type="submit" class="btn btn-primary">Update Product</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+{% include 'requirements/js_requirement.html' %}
+</html>

@@ -34,22 +34,27 @@
             {% if produits %}
                 {% set produit = produits[0] %}
                 <div class="card mb-4">
-                    <a href="{{ produit.image }}"><img class="card-img-top"
-                                                       src="{{ url_for('static', filename=produit.image) }}"
-                                                       alt="{{ produit.name }}"/></a>
+                    <a href="{{ url_for('static', filename=produit.image) }}">
+                        <img class="card-img-top"
+                             src="{{ url_for('static', filename=produit.image) }}"
+                             alt="{{ produit.name }}"/>
+                    </a>
                     <div class="card-body">
                         <div class="small text-muted">{{ produit.date }}</div>
                         <h2 class="card-title">{{ produit.name }}</h2>
                         <p class="card-text">{{ produit.description }}</p>
-                        {#                        <a class="btn btn-primary" href="#!">Read more →</a>#}
+                        {% if session["is_login"] == True %}
+                            <a class="btn btn-danger" href="/delete_product/{{ produit.id }}">Delete</a>
+                            <a class="btn btn-secondary" href="/update_product/{{ produit.id }}">Update</a>
+                        {% endif %}
                     </div>
                 </div>
             {% endif %}
             <div class="row">
-                <div class="col-lg-12">
-                    {% for produit in produits %}
+                <div class="col-lg-6">
+                    {% for produit in produits[:0] %}
                         <div class="card mb-4">
-                            <a href="{{ produit.image }}">
+                            <a href="{{ url_for('static', filename=produit.image) }}">
                                 <img class="card-img-top"
                                      src="{{ url_for('static', filename=produit.image) }}"
                                      alt="{{ produit.name }}"/>
@@ -58,6 +63,10 @@
                                 <div class="small text-muted">{{ produit.date }}</div>
                                 <h2 class="card-title">{{ produit.name }}</h2>
                                 <p class="card-text">{{ produit.description }}</p>
+                                {% if session["is_login"] == True %}
+                                    <a class="btn btn-danger" href="/delete_product/{{ produit.id }}">Delete</a>
+                                    <a class="btn btn-secondary" href="/update_product/{{ produit.id }}">Update</a>
+                                {% endif %}
                             </div>
                         </div>
                     {% endfor %}
@@ -70,11 +79,11 @@
             <div class="card mb-4">
                 <div class="card-header">Search</div>
                 <div class="card-body">
-                    <div class="input-group">
-                        <input class="form-control" type="text" placeholder="Enter search term..."
+                    <form action="/search" method="post" class="input-group">
+                        <input class="form-control" name="name" type="text" placeholder="Enter search term..."
                                aria-label="Enter search term..." aria-describedby="button-search"/>
-                        <button class="btn btn-primary" id="button-search" type="button">Go!</button>
-                    </div>
+                        <button class="btn btn-primary" id="button-search" type="submit">search</button>
+                    </form>
                 </div>
             </div>
             <!-- Categories widget-->
@@ -84,14 +93,15 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <ul class="list-unstyled mb-0">
-                                <li><a href="#!">Artisanal</a></li>
-                                <li><a href="#!">Fishing</a></li>
+                                <li><a href="/">All</a></li>
+                                <li><a href="/Artisanal">Artisanal</a></li>
+                                <li><a href="/Fishing">Fishing</a></li>
                             </ul>
                         </div>
                         <div class="col-sm-6">
                             <ul class="list-unstyled mb-0">
-                                <li><a href="#!">Farming</a></li>
-                                <li><a href="#!">Breeding</a></li>
+                                <li><a href="/Farming">Farming</a></li>
+                                <li><a href="/Breeding">Breeding</a></li>
                             </ul>
                         </div>
                     </div>
