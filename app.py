@@ -14,7 +14,7 @@ def index():
 
 
 @app.route("/<categorie>")
-def trie_par(categorie):
+def trie_par(categorie: str):
     produits = produit_dao.get_all()
     c_produits = [prod for prod in produits if categorie_dao.get_by_id(prod.id_categorie).name == categorie]
     return render_template("index.html", produits=c_produits)
