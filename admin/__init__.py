@@ -30,10 +30,10 @@ def login_page():
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
-        admin: Admin = admin_dao.get_by_email(email)
-        if admin.password == password:
+        wanna_login_admin: Admin = admin_dao.get_by_email(email)
+        if wanna_login_admin.password == password:
             session["is_login"] = True
-            session["id_admin"] = admin.id
+            session["id_admin"] = wanna_login_admin.id
             return redirect("/?message=success login")
         return redirect("/login?message=login failed")
     return render_template("login.html")
@@ -83,7 +83,7 @@ def delete_produit(id_: int):
             return redirect(f"/?message=product {id_} is deleted ")
         else:
             return redirect(f"/?message=failed to update {id_} ")
-    return redirect("login")
+    return redirect("/login")
 
 
 @admin.route('/update_product/<id_>', methods=["get", "post"])
@@ -112,4 +112,4 @@ def update_product(id_: int):
             categories = categorie_dao.get_all()
             return render_template("update_product.html", produit=produit, categories=categories,
                                    categorie_dao=categorie_dao)
-    return redirect("login")
+    return redirect("/login")
