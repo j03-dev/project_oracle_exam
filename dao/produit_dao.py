@@ -1,70 +1,90 @@
 from dao import Dao
+from database_connection import database_connection
 from entity import Produit
 
 
 class ProduitDao(Dao):
-    def create(self, entity: Produit) -> bool:
+
+    @staticmethod
+    def create(entity: Produit) -> bool:
         try:
+            connection = database_connection()
             sql = "insert into produit(name, description, image, id_categorie, id_admin)" \
-                  " values (:name, :description, :image,:id_categorie, :id_admin) "
-            cursor = self.conn.cursor()
-            cursor.execute(sql, name=entity.name, description=entity.description, image=entity.image,
-                           id_categorie=entity.id_categorie,
-                           id_admin=entity.id_admin)
+                  " values (?, ?, ?, ?, ?) "
+            cursor = connection.cursor()
+            cursor.execute(sql, (entity.name, entity.description, entity.image,
+                                 entity.id_categorie,
+                                 entity.id_admin))
             cursor.close()
-            self.conn.commit()
+            connection.commit()
+            connection.close()
             return True
         except Exception as e:
             print(f"Error {e}")
             return False
 
-    def update(self, entity: Produit) -> bool:
+    @staticmethod
+    def update(entity: Produit) -> bool:
+        connection = database_connection()
         try:
             sql = "update produit " \
-                  "set name=:name," \
-                  " description=:description," \
-                  " image=:image," \
-                  " id_categorie=:id_categorie" \
-                  " where id=:id"
-            cursor = self.conn.cursor()
-            cursor.execute(sql, name=entity.name, description=entity.description, image=entity.image,
-                           id_categorie=entity.id_categorie,
-                           id=entity.id)
+                  "set name=?," \
+                  " description=?," \
+                  " image=?," \
+                  " id_categorie=?" \
+                  " where id=?"
+            cursor = connection.cursor()
+            cursor.execute(sql, (entity.name,
+                                 entity.description,
+                                 entity.image,
+                                 entity.id_categorie,
+                                 entity.id)
+                           )
             cursor.close()
-            self.conn.commit()
+            connection.commit()
+            connection.close()
             return True
         except Exception as e:
             print(f"Error {e}")
             return False
 
-    def delete(self, id_: int) -> bool:
+    @staticmethod
+    def delete(id_: int) -> bool:
+        connection = database_connection()
         try:
-            sql = "delete from produit where id=:id"
-            cursor = self.conn.cursor()
-            cursor.execute(sql, id=id_)
+            sql = "delete from produit where id=?"
+            cursor = connection.cursor()
+            cursor.execute(sql, (id_,))
             cursor.close()
-            self.conn.commit()
+            connection.commit()
+            connection.close()
             return True
         except Exception as e:
             print(f"error {e}")
             return False
 
-    def get_by_id(self, id_: int) -> Produit:
-        sql = "select * from produit where id=:id"
-        cursor = self.conn.cursor()
-        cursor.execute(sql, id=id_)
+    @staticmethod
+    def get_by_id(id_: int) -> Produit:
+        connection = database_connection()
+        sql = "select * from produit where id=?"
+        cursor = connection.cursor()
+        cursor.execute(sql, (id_,))
         result = cursor.fetchone()
         if result is None:
             return Produit()
         cursor.close()
+        connection.close()
         return Produit(*result)
 
-    def get_all(self) -> list[Produit]:
+    @staticmethod
+    def get_all() -> list[Produit]:
+        connection = database_connection()
         sql = "select * from produit"
-        cursor = self.conn.cursor()
+        cursor = connection.cursor()
         cursor.execute(sql)
         result = cursor.fetchall()
         if len(result) == 0:
             return result
         cursor.close()
+        connection.close()
         return [Produit(*row) for row in result]

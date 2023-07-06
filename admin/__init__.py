@@ -7,18 +7,17 @@ from dao.admin_dao import AdminDao
 from dao.categorie_dao import CategorieDao
 from dao.produit_dao import ProduitDao
 from entity import Admin, Produit
-from setting import database_connection
 
 admin = Blueprint('admin', __name__)
-connection = database_connection()
-admin_dao = AdminDao(connection)
-categorie_dao = CategorieDao(connection)
-produit_dao = ProduitDao(connection)
+admin_dao = AdminDao()
+categorie_dao = CategorieDao()
+produit_dao = ProduitDao()
 
 
 def is_admin_is_authenticated() -> bool:
     try:
-        if session['is_login']: return True
+        if session['is_login']:
+            return True
         return False
     except Exception as e:
         print(f"error{e}")

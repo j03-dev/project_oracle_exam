@@ -1,13 +1,15 @@
 from dao import Dao
+from database_connection import database_connection
 from entity import Admin
-from setting import database_connection
 
 
 class AdminDao(Dao):
-    def get_by_email(self, email) -> Admin:
+    @staticmethod
+    def get_by_email(email) -> Admin:
+        connection = database_connection()
         sql = "select * from admin where email=:email"
-        cursor = self.conn.cursor()
-        cursor.execute(sql, email=email)
+        cursor = connection.cursor()
+        cursor.execute(sql, (email,))
         result = cursor.fetchone()
 
         if result is None:
@@ -15,12 +17,6 @@ class AdminDao(Dao):
 
         id_, email, password = result
         cursor.close()
+        connection.close()
 
         return Admin(id_, email, password)
-
-
-if __name__ == "__main__":
-    conn = database_connection()
-    admin_dao = AdminDao(conn)
-    admin = admin_dao.get_by_email("24nomeniavo@gmail.com")
-    print(admin)

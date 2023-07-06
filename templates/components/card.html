@@ -1,0 +1,18 @@
+<div class="card mb-4">
+    <a href="{{ url_for('static', filename=produit.image) }}">
+        <img class="card-img-top"
+             src="{{ url_for('static', filename=produit.image) }}"
+             alt="{{ produit.name }}"/>
+    </a>
+    <div class="card-body">
+        <div class="small text-muted">{{ produit.date }}</div>
+        <h2 class="card-title">{{ produit.name }}</h2>
+        <p class="card-text">{{ produit.description[:max_description] }}...</p>
+        {% if session["is_login"] == True %}
+            <a class="btn btn-danger" href="/delete_product/{{ produit.id }}">Delete</a>
+            <a class="btn btn-secondary" href="/update_product/{{ produit.id }}">Update</a>
+        {% else %}
+            <a class="btn btn-primary" href="/detail/{{ produit.id }}">Read more →</a>
+        {% endif %}
+    </div>
+</div>

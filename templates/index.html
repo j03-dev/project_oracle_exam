@@ -11,7 +11,7 @@
     {% include 'requirements/css_requirment.html' %}
 </head>
 <body>
-{% include 'nav.html' %}
+{% include 'components/nav.html' %}
 <!-- Page header with logo and tagline-->
 <header class="py-5 bg-light border-bottom mb-4">
     <div class="container">
@@ -34,46 +34,24 @@
             <!-- Featured blog post-->
             {% if produits %}
                 {% set produit = produits[0] %}
-                <div class="card mb-4">
-                    <a href="{{ url_for('static', filename=produit.image) }}">
-                        <img class="card-img-top"
-                             src="{{ url_for('static', filename=produit.image) }}"
-                             alt="{{ produit.name }}"/>
-                    </a>
-                    <div class="card-body">
-                        <div class="small text-muted">{{ produit.date }}</div>
-                        <h2 class="card-title">{{ produit.name }}</h2>
-                        <p class="card-text">{{ produit.description.read()[:max_description] }}...</p>
-                        {% if session["is_login"] == True %}
-                            <a class="btn btn-danger" href="/delete_product/{{ produit.id }}">Delete</a>
-                            <a class="btn btn-secondary" href="/update_product/{{ produit.id }}">Update</a>
-                        {% else %}
-                            <a class="btn btn-primary" href="/detail/{{ produit.id }}">Read more →</a>
-                        {% endif %}
-                    </div>
-                </div>
+                {% include 'components/card.html' %}
             {% endif %}
             <div class="row">
-                <div class="col-lg-6">
-                    {% for produit in produits[:0] %}
-                        <div class="card mb-4">
-                            <a href="{{ url_for('static', filename=produit.image) }}">
-                                <img class="card-img-top"
-                                     src="{{ url_for('static', filename=produit.image) }}"
-                                     alt="{{ produit.name }}"/>
-                            </a>
-                            <div class="card-body">
-                                <div class="small text-muted">{{ produit.date }}</div>
-                                <h2 class="card-title">{{ produit.name }}</h2>
-                                <p class="card-text">{{ produit.description.read()[:max_description] }}...</p>
-                                {% if session["is_login"] == True %}
-                                    <a class="btn btn-danger" href="/delete_product/{{ produit.id }}">Delete</a>
-                                    <a class="btn btn-secondary" href="/update_product/{{ produit.id }}">Update</a>
-                                {% else %}
-                                    <a class="btn btn-primary" href="/detail/{{ produit.id }}">Read more →</a>
-                                {% endif %}
-                            </div>
-                        </div>
+                {% set prod = produits[1:] %}
+                <div class="col-6">
+                    {% for i in (0, prod|length, 2) %}
+                        {% set produit = prod[i] %}
+                        {% if i < prod|length %}
+                            {% include 'components/card.html' %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="col-6">
+                    {% for i in (1, prod|length, 2) %}
+                        {% set produit = prod[i] %}
+                        {% if i < prod|length %}
+                            {% include 'components/card.html' %}
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>

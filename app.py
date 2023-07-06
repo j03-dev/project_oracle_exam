@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 
-from admin import admin, produit_dao, categorie_dao
+from admin import admin, produit_dao, categorie_dao, is_admin_is_authenticated
 
 app = Flask(__name__)
 app.secret_key = "24C5Bda7cB3150E20be510065B7cff9ea9caB7DA"
@@ -9,6 +9,7 @@ app.register_blueprint(admin)
 
 @app.route("/")
 def index():
+    session["is_login"] = is_admin_is_authenticated()
     produits = produit_dao.get_all()
     return render_template("index.html", produits=produits)
 

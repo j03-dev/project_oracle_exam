@@ -1,7 +1,5 @@
 from typing import Any
 
-from oracledb import Connection
-
 
 class Dao:
     """
@@ -9,13 +7,8 @@ class Dao:
     get access of your database here
     """
 
-    def __init__(self, conn: Connection):
-        """
-        :param conn: conn is Connection object from oracledb import Connection
-        """
-        self.conn: Connection = conn
-
-    def create(self, entity: Any) -> bool:
+    @staticmethod
+    def create(entity: Any) -> bool:
         """
         save information on the database
         :param entity:
@@ -23,15 +16,18 @@ class Dao:
         """
         pass
 
-    def delete(self, id_: int) -> bool:
+    @staticmethod
+    def delete(id_: int) -> bool:
         """delete information on the database"""
         pass
 
-    def update(self, entity: Any) -> bool:
+    @staticmethod
+    def update(entity: Any) -> bool:
         """update information on the database"""
         pass
 
-    def get_by_id(self, id_: int) -> object:
+    @staticmethod
+    def get_by_id(id_: int) -> object:
         """
         get entity from database with here id
         :param id_:
@@ -39,7 +35,8 @@ class Dao:
         """
         pass
 
-    def get_all(self) -> list[object]:
+    @staticmethod
+    def get_all() -> list[object]:
         """
         get all list of element in database
         :return: list of entity object
