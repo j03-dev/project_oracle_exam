@@ -24,10 +24,9 @@ def trie_par(categorie: str):
 @app.route("/search", methods=["post"])
 def search():
     produits = product_repository.get_all()
-    if request.method == "POST":
-        name = request.form.get('name')
-        s_produits = [prod for prod in produits if name.lower() in prod.name.lower()]
-        return render_template("index.html", produits=s_produits)
+    name = request.form.get('name')
+    s_produits = [prod for prod in produits if name.lower() in prod.name.lower()]
+    return render_template("index.html", produits=s_produits)
 
 
 @app.route("/detail/<id_>", methods=["get"])
@@ -37,4 +36,4 @@ def detail(id_: int):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=False)

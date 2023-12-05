@@ -58,14 +58,12 @@ def add_product():
             image = request.files["image"]
             id_categorie = request.form.get("id_categorie")
             id_admin = int(session['id_admin'])
-            # upload image file
             image_path = os.path.join(upload_dir, secure_filename(image.filename))
             image.save(image_path)
 
             image = "image/" + image.filename
             produit = Produit(
-                name=name, description=description, image=image, id_categorie=id_categorie,
-                id_admin=id_admin
+                id=None, name=name, description=description, image=image, id_categorie=id_categorie, id_admin=id_admin
             )
 
             if product_repository.create(produit):

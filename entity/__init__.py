@@ -1,38 +1,33 @@
+from dataclasses import dataclass
+from typing import Optional
+
+
+@dataclass
 class Produit:
-    def __init__(self, id=None, name=None, description=None, image=None, id_categorie=None, date=None,
-                 id_admin=None):
-        self.id = id
-        self.name = name
-        self.description = description
-        self.image = image
-        self.id_categorie = id_categorie
-        self.date = date
-        self.id_admin = id_admin
+    id: Optional = None
+    name: Optional = None
+    description: Optional = None
+    image: Optional = None
+    id_categorie: Optional = None
+    date: Optional = None
+    id_admin: Optional = None
 
 
-class Evolution:
-    def __init__(self, id=None, date=None, prix=None, id_produit=None):
-        self.id: int = id
-        self.date: int = date
-        self.prix: str = prix
-        self.id_produit: int = id_produit
-
-
+@dataclass
 class Categorie:
-    def __init__(self, id=None, name=None, id_admin=None):
-        self.id = id
-        self.name = name
-        self.id_admin = id_admin
+    id: Optional
+    name: Optional
+    id_admin: Optional
 
     def __str__(self):
         return "Categorie{" + str(self.id) + "," + str(self.name) + "," + str(self.id_admin) + "}"
 
 
+@dataclass
 class Admin:
-    def __init__(self, id=None, email=None, password=None):
-        self.id = id
-        self.email = email
-        self.password = password
+    id: Optional = None
+    email: Optional = None
+    password: Optional = None
 
     def __str__(self):
         return "Admin{" + str(self.id) + "," + str(self.email) + "," + str(self.password) + "}"

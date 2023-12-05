@@ -12,8 +12,7 @@ class ProductRepository(Repository):
     def create(entity: Produit) -> bool:
         try:
             connection = database_connection()
-            sql = "insert into produit(name, description, image, id_categorie, id_admin)" \
-                  " values (?, ?, ?, ?, ?) "
+            sql = "insert into produit(name, description, image, id_categorie, id_admin) values (?, ?, ?, ?, ?) "
             cursor = connection.cursor()
             fields = (
                 entity.name,
