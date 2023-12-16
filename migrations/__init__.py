@@ -1,22 +1,14 @@
-from repositories.admin_repository import AdminRepository
+from repositories.article_repository import ProductRepository
 from repositories.category_repository import CategoryRepository
-from repositories.product_repository import ProductRepository
+from repositories.image_repository import ImageRepository
+from repositories.user_repository import UserRepository
 
-repositories = [AdminRepository(), CategoryRepository(), ProductRepository()]
+repositories = [UserRepository(), ImageRepository(), ProductRepository(), CategoryRepository()]
 
 
 def migrate():
-
     for repo in repositories:
         repo.migration()
-
-
-def drop():
-    for repo in repositories[::-1]:
-        try:
-            repo.drop()
-        except:
-            pass
 
 
 if __name__ == "__main__":

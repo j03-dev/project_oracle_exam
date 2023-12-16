@@ -1,6 +1,6 @@
 from abc import ABC
 from os import path
-from typing import Any
+from typing import Any, Optional, List
 
 from database_connection import database_connection
 
@@ -8,6 +8,7 @@ from database_connection import database_connection
 class Repository(ABC):
     _name = ""
     _migration_file = ""
+    _object = None
 
     def set_migration_path(self):
         absolute_path = path.abspath(".")
@@ -31,38 +32,128 @@ class Repository(ABC):
         except Exception as e:
             raise Exception(f"Drop table failed cause {e}")
 
-    @staticmethod
-    def create(entity: Any) -> bool:
+    def create(self, entity: Any) -> bool:
         """
-        save information on the database
-        :param entity:
-        :return: bool
-        """
-        pass
+        Save information to the database.
 
-    @staticmethod
-    def delete(id_: int) -> bool:
+        Args:
+            entity (Any): The object containing information to be saved.
+
+        Returns:
+            bool: True if the save operation is successful, False otherwise.
+        """
+        try:
+            fields = []
+            values = []
+
+            for k, v in entity.__dict__.items():
+                if v is not None:
+                    fields.append(k)
+                    values.append(v)
+
+            placeholders = ",".join("?" * len(values))
+            insert_fields = ",".join(fields)
+
+            # Build and execute the SQL query
+            sql = f"INSERT INTO {self._name}({insert_fields}) VALUES ({placeholders})"
+            connection = database_connection()
+            cursor = connection.cursor()
+            cursor.execute(sql, values)
+            connection.commit()
+            connection.close()
+
+            return True
+        except Exception as e:
+            print(f"Error during save: {e}")
+            return False
+
+    def update(self, entity: Any) -> bool:
+        """
+        Update information in the database.
+
+        Args:
+           entity (Any): The object containing updated information.
+
+        Returns:
+           bool: True if the update is successful, False otherwise.
+        """
+        try:
+            fields = []
+            values = []
+            entity_dict = entity.__dict__
+
+            # Extract primary key and remove it from entity
+            primary_key = entity_dict.pop("id")
+
+            for k, v in entity_dict.items():
+                if v is not None:
+                    fields.append(f"{k}=?")
+                    values.append(v)
+
+            set_fields = ",".join(fields)
+
+            # Add primary key to values for WHERE clause
+            values.append(primary_key)
+
+            # Build and execute the SQL query
+            sql = f"UPDATE {self._name} SET {set_fields} WHERE id=?"
+            connection = database_connection()
+            cursor = connection.cursor()
+            cursor.execute(sql, values)
+            connection.commit()
+            connection.close()
+
+            return True
+        except Exception as e:
+            print(f"Error during update: {e}")
+            return False
+
+    def delete(self, id_: int) -> bool:
         """delete information on the database"""
-        pass
+        connection = database_connection()
+        try:
+            sql = f"delete from {self._name} where id=?"
+            cursor = connection.cursor()
+            cursor.execute(sql, (id_,))
+            cursor.close()
+            connection.commit()
+            connection.close()
+            return True
+        except Exception as e:
+            print(f"error {e}")
+            return False
 
-    @staticmethod
-    def update(entity: Any) -> bool:
-        """update information on the database"""
-        pass
+    def get_by_id(self, id_: int) -> Optional[object]:
+        """
+        Retrieve an entity from the database based on its ID.
 
-    @staticmethod
-    def get_by_id(id_: int) -> object:
-        """
-        get entity from database with here id
-        :param id_:
-        :return: entity object
-        """
-        pass
+        Args:
+            id_ (int): The ID of the entity to retrieve.
 
-    @staticmethod
-    def get_all() -> list[object]:
+        Returns:
+            Optional[object]: The retrieved entity object, or None if not found.
         """
-        get all list of element in database
-        :return: list of entity object
+        connection = database_connection()
+        sql = f"SELECT * FROM {self._name} WHERE id=?"
+        cursor = connection.cursor()
+        cursor.execute(sql, (id_,))
+        result = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        return None if result is None else self._object(*result)
+
+    def get_all(self) -> List[object]:
         """
-        pass
+        Retrieve a list of all elements from the database.
+
+        Returns:
+            List[object]: A list containing entity objects.
+        """
+        connection = database_connection()
+        sql = f"SELECT * FROM {self._name}"
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        cursor.close()
+        connection.close()
+        return [] if not result else [self._object(*row) for row in result]

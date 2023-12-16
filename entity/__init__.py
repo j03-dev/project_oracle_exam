@@ -3,31 +3,30 @@ from typing import Optional
 
 
 @dataclass
-class Produit:
+class Article:
     id: Optional = None
     name: Optional = None
     description: Optional = None
-    image: Optional = None
-    id_categorie: Optional = None
+    image_id: Optional = None
+    category_id: Optional = None
     date: Optional = None
-    id_admin: Optional = None
+    user_id: Optional = None
 
 
 @dataclass
 class Categorie:
-    id: Optional
-    name: Optional
-    id_admin: Optional
-
-    def __str__(self):
-        return "Categorie{" + str(self.id) + "," + str(self.name) + "," + str(self.id_admin) + "}"
+    id: Optional = None
+    name: Optional = None
+    user_id: Optional = None
 
 
 @dataclass
-class Admin:
+class User:
     id: Optional = None
     email: Optional = None
     password: Optional = None
 
-    def __str__(self):
-        return "Admin{" + str(self.id) + "," + str(self.email) + "," + str(self.password) + "}"
+
+class Image:
+    id: int = None
+    path: str = None

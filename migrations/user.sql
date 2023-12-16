@@ -1,4 +1,4 @@
-create table admin
+create table user
 (
     id       integer primary key autoincrement not null,
     email    varchar(255) unique not null,
