@@ -3,32 +3,31 @@ from flask import Blueprint, request
 from repositories.article_repository import ArticleRepository
 from repositories.category_repository import CategoryRepository
 
-article_blueprint = Blueprint("article_blueprint", __name__)
+article_blueprint = Blueprint("article_blueprint", __name__, url_prefix="/article")
 
 article_repository = ArticleRepository()
 category_repository = CategoryRepository()
 
 
-@article_blueprint.route("/article", methods=["GET"])
+@article_blueprint.route("", methods=["GET"])
 def get_all():
     produits = article_repository.get_all()
     return produits, 200
 
 
-@article_blueprint.route("/article/<id_>", methods=["GET"])
+@article_blueprint.route("/<id_>", methods=["GET"])
 def retrieve(id_: int):
     produit = article_repository.get_by_id(id_)
     return produit.__dict__, 200
 
 
-@article_blueprint.route("/article/category/<categorie>", methods=["GET"])
+@article_blueprint.route("/category/<categorie>", methods=["GET"])
 def article_categorie(categorie: str):
-    produits = article_repository.get_all()
-    produits = [prod for prod in produits if category_repository.get_by_id(prod.id_categorie).name == categorie]
+    produits = article_repository.get_by_category(categorie)
     return produits, 200
 
 
-@article_blueprint.route("/article/search/", methods=["GET"])
+@article_blueprint.route("/search/", methods=["GET"])
 def search_article():
     query = request.args.get('q', None)
     if query:
