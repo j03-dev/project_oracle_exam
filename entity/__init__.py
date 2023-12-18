@@ -23,10 +23,14 @@ class Categorie:
 @dataclass
 class User:
     id: Optional = None
+    username: Optional = None
+    first_name: Optional = None
+    last_name: Optional = None
     email: Optional = None
     password: Optional = None
 
 
+@dataclass
 class Image:
     id: int = None
     path: str = None

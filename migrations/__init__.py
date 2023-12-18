@@ -1,9 +1,9 @@
-from repositories.article_repository import ProductRepository
+from repositories.article_repository import ArticleRepository
 from repositories.category_repository import CategoryRepository
 from repositories.image_repository import ImageRepository
 from repositories.user_repository import UserRepository
 
-repositories = [UserRepository(), ImageRepository(), ProductRepository(), CategoryRepository()]
+repositories = [UserRepository(), ImageRepository(), ArticleRepository(), CategoryRepository()]
 
 
 def migrate():
