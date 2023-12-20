@@ -11,19 +11,19 @@ category_repository = CategoryRepository()
 
 @article_blueprint.route("", methods=["GET"])
 def get_all():
-    produits = article_repository.get_all()
+    produits = article_repository.all()
     return produits, 200
 
 
 @article_blueprint.route("/<id_>", methods=["GET"])
 def retrieve(id_: int):
-    produit = article_repository.get_by_id(id_)
+    produit = article_repository.get(id=id_)
     return produit.__dict__, 200
 
 
 @article_blueprint.route("/category/<categorie>", methods=["GET"])
 def article_categorie(categorie: str):
-    produits = article_repository.get_by_category(categorie)
+    produits = article_repository.filter(category_name=categorie)
     return produits, 200
 
 
@@ -31,11 +31,7 @@ def article_categorie(categorie: str):
 def search_article():
     query = request.args.get('q', None)
     if query:
-        articles = article_repository.get_all()
-        articles = [
-            article for article in articles if
-            query.lower() in article.name.lower() or query.lower() in article.description.lower()
-        ]
+        articles = article_repository.filter(opl="or", description=query, name=query)
         return articles, 200
     else:
         return []

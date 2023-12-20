@@ -1,17 +1,15 @@
 from dataclasses import dataclass
-from os import getenv
 
 import jwt
 from flask import Blueprint, request
 
 from entity import User
 from repositories.user_repository import UserRepository
+from setting import SECRET_KEY
 from utils import token_required, deserialize
 
 user_repository = UserRepository()
 user_blueprint = Blueprint("user_blueprint", __name__, url_prefix="/user")
-
-SECRET_KEY = getenv("SECRET_KEY")
 
 
 @dataclass
@@ -23,7 +21,7 @@ class Credential:
 @user_blueprint.route("/login", methods=["POST"])
 def login():
     credential = deserialize(request.json, Credential)
-    user = user_repository.get_by_email(credential.email)
+    user = user_repository.get(email=credential.email)
     if user and user.password == credential.password:
         token = jwt.encode({"user_id": user.id}, SECRET_KEY, algorithm="HS256")
         return {"user": user.__dict__, "token": token}, 200
@@ -34,7 +32,9 @@ def login():
 @user_blueprint.route("", methods=["POST"])
 def register():
     user: User = deserialize(request.json, User)
-    message, code = "success", 201 if user_repository.create(user) else ("failed", 404)
+    message, code = "success", 201
+    if not user_repository.create(user):
+        message, code = "failed", 404
     return {"detail": f"add user is {message}"}, code
 
 
@@ -46,8 +46,12 @@ def manage(current_user: User):
     elif request.method == "PUT":
         user: User = deserialize(request.json, User)
         user.id = current_user.id
-        message, code = "success", 200 if user_repository.update(user) else ("failed", 404)
+        message, code = "success", 200
+        if not user_repository.update(user):
+            message, code = "failed", 404
         return {"detail": f"update user is {message}"}, code
     elif request.method == "DELETE":
-        message, code = "success", 202 if user_repository.delete(current_user.id) else ("failed", 404)
+        message, code = "success", 202
+        if not user_repository.delete(current_user.id):
+            message, code = "failed", 404
         return {"detail": f"delete user is {message}"}, code

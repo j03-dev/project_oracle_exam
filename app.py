@@ -1,14 +1,11 @@
-from os import getenv
-
-from dotenv import load_dotenv
 from flask import Flask
 
 from blueprints import category_blueprint, article_blueprint, user_blueprint
+from setting import SECRET_KEY
 
-load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = getenv("SECRET_KEY")
+app.secret_key = SECRET_KEY
 app.register_blueprint(article_blueprint)
 app.register_blueprint(category_blueprint)
 app.register_blueprint(user_blueprint)

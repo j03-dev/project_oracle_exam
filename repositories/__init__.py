@@ -1,8 +1,17 @@
+import sqlite3
 from abc import ABC
 from os import path
 from typing import Any, Optional, List
 
-from database_connection import database_connection
+from setting import DB_NAME
+
+
+def database_connection():
+    try:
+        conn = sqlite3.connect(DB_NAME)
+        return conn
+    except Exception as e:
+        raise Exception(f"failed to connect to the database raison {e}")
 
 
 class Repository(ABC):
@@ -43,8 +52,7 @@ class Repository(ABC):
             bool: True if the save operation is successful, False otherwise.
         """
         try:
-            fields = []
-            values = []
+            fields, values = [], []
 
             for k, v in entity.__dict__.items():
                 if v is not None:
@@ -78,8 +86,7 @@ class Repository(ABC):
            bool: True if the update is successful, False otherwise.
         """
         try:
-            fields = []
-            values = []
+            fields, values = [], []
             entity_dict = entity.__dict__
 
             # Extract primary key and remove it from entity
@@ -123,26 +130,7 @@ class Repository(ABC):
             print(f"error {e}")
             return False
 
-    def get_by_id(self, id_: int) -> Optional[object]:
-        """
-        Retrieve an entity from the database based on its ID.
-
-        Args:
-            id_ (int): The ID of the entity to retrieve.
-
-        Returns:
-            Optional[object]: The retrieved entity object, or None if not found.
-        """
-        connection = database_connection()
-        sql = f"SELECT * FROM {self._name} WHERE id=?"
-        cursor = connection.cursor()
-        cursor.execute(sql, (id_,))
-        result = cursor.fetchone()
-        cursor.close()
-        connection.close()
-        return None if result is None else self._object(*result)
-
-    def get_all(self) -> List[object]:
+    def all(self) -> List[object]:
         """
         Retrieve a list of all elements from the database.
 
@@ -153,6 +141,44 @@ class Repository(ABC):
         sql = f"SELECT * FROM {self._name}"
         cursor = connection.cursor()
         cursor.execute(sql)
+        result = cursor.fetchall()
+        cursor.close()
+        connection.close()
+        return [] if not result else [self._object(*row) for row in result]
+
+    def get(self, opl="and", **kwargs) -> Optional[object]:
+        connection = database_connection()
+        keys, values = [], []
+
+        for k, v in kwargs.items():
+            k = k.replace('_', '.')
+            keys.append(f"{k}=?")
+            values.append(v)
+
+        placeholders = f" {opl}".join(keys)
+
+        sql = f"SELECT * FROM {self._name} WHERE {placeholders}"
+        cursor = connection.cursor()
+        cursor.execute(sql, values)
+        result = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        return None if result is None else self._object(*result)
+
+    def filter(self, opl="and", **kwargs) -> List[object]:
+        connection = database_connection()
+        keys, values = [], []
+
+        for k, v in kwargs.items():
+            k = k.replace('_', '.')
+            keys.append(f"{k}=?")
+            values.append(v)
+
+        placeholders = f" {opl}".join(keys)
+
+        sql = f"SELECT * FROM {self._name} WHERE {placeholders}"
+        cursor = connection.cursor()
+        cursor.execute(sql, values)
         result = cursor.fetchall()
         cursor.close()
         connection.close()

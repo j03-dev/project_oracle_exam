@@ -9,5 +9,5 @@ category_repository = CategoryRepository()
 
 @category_blueprint.route("/category", methods=["GET"])
 def get_categories():
-    categories = category_repository.get_all()
+    categories = category_repository.all()
     return categories, 200
