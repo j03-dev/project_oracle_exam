@@ -30,8 +30,4 @@ def article_categorie(categorie: str):
 @article_blueprint.route("/search/", methods=["GET"])
 def search_article():
     query = request.args.get('q', None)
-    if query:
-        articles = article_repository.filter(opl="or", description=query, name=query)
-        return articles, 200
-    else:
-        return []
+    return [] if not query else (article_repository.filter(opl="or", description=query, name=query), 200)
